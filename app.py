@@ -46,7 +46,12 @@ if st.button("🔍 Beantwoord vraag"):
     if question.strip():
         with st.spinner("🤔 Model denkt na..."):
             result = qa_pipeline(table=df, query=question)
-        st.success("✅ Antwoord:")
-        st.write(result['answer'])
+
+        # 🔍 Nieuw: controleer of er wel een match is
+        if not result.get("coordinates"):
+            st.warning("⚠️ Ik kon geen duidelijk antwoord vinden in de tabel. Controleer je vraag of de data.")
+        else:
+            st.success("✅ Antwoord:")
+            st.write(result['answer'])
     else:
         st.error("⚠️ Stel eerst een vraag.")
